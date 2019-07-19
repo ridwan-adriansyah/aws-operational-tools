@@ -56,6 +56,7 @@ def copy_snapshot(source_snapshot_arn, kms_key_id, tg_snapshot_id):
     with snapshot identifier `db_instance_id` + "-to-be-shared"
     and wait for snapshot to be available.
     """
+
     print("copying snapshot " + source_snapshot_arn + " and ecrypt with KMS key " +
           kms_key_id + " to " + tg_snapshot_id + "-to-be-shared")
     target_snapshot_id = ""
@@ -64,7 +65,8 @@ def copy_snapshot(source_snapshot_arn, kms_key_id, tg_snapshot_id):
         response = client.copy_db_snapshot(
             SourceDBSnapshotIdentifier=source_snapshot_arn,
             TargetDBSnapshotIdentifier=tg_snapshot_id + '-to-be-shared',
-            KmsKeyId=kms_key_id
+            KmsKeyId=kms_key_id,
+            CopyTags=True
         )
         target_snapshot_id = response["DBSnapshot"]["DBSnapshotIdentifier"]
         if target_snapshot_id != "":
