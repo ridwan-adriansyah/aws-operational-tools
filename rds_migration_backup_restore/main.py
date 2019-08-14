@@ -136,6 +136,7 @@ def run():
 
     if shared_snapshot_id == "":
         return
+    time.sleep(10)
     share_snapshot(shared_snapshot_id, dest_account_id)
 
 
