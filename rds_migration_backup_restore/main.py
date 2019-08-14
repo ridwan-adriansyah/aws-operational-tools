@@ -127,15 +127,18 @@ def run():
     dest_account_id = argv[3]
 
     snapshot_arn = create_snapshot(db_instance_id)
-
     if snapshot_arn == "":
         return
 
+    time.sleep(10)
+
     shared_snapshot_id = copy_snapshot(
         snapshot_arn, kms_key_id, db_instance_id)
-
     if shared_snapshot_id == "":
         return
+
+    time.sleep(10)
+
     share_snapshot(shared_snapshot_id, dest_account_id)
 
 
