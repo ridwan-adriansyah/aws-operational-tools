@@ -96,7 +96,7 @@ def wait_snapshot_available(snapshot_id):
 # if not,  you can just create the snapshot and share the snapshot and the
 # kms key used to encrypt the database to target account
 @timeit
-def create_snapshot(db_instance_id):
+def create_snapshot(db_instance_id, product_domain):
     """
     Create snapshot from db_instance with snapshot identifier 
     `db_instance_id` + "-to-be-copied", and wait for it to be available.
@@ -108,6 +108,12 @@ def create_snapshot(db_instance_id):
         response = client.create_db_snapshot(
             DBSnapshotIdentifier=db_instance_id + '-to-be-copied',
             DBInstanceIdentifier=db_instance_id,
+            Tags=[
+                {
+                    'Key': 'ProductDomain',
+                    'Value': product_domain
+                }
+            ]
         )
         snapshot_arn = response["DBSnapshot"]["DBSnapshotArn"]
         if snapshot_arn != "":
@@ -119,14 +125,15 @@ def create_snapshot(db_instance_id):
 
 
 def run():
-    if len(argv) < 4:
-        print("Usage: main.py <db-instance-id> <kms-key-id> <destination-aws-account-id>")
+    if len(argv) < 5:
+        print("Usage: main.py <db-instance-id> <kms-key-id> <destination-aws-account-id> <product-domain-abbreviation>")
         exit(-1)
     db_instance_id = argv[1]
     kms_key_id = argv[2]
     dest_account_id = argv[3]
+    product_domain = argv[4]
 
-    snapshot_arn = create_snapshot(db_instance_id)
+    snapshot_arn = create_snapshot(db_instance_id, product_domain)
     if snapshot_arn == "":
         return
 
