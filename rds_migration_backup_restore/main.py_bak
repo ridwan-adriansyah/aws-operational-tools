@@ -22,7 +22,8 @@ def timeit(method):
         ts = time.time()
         result = method(*args, **kw)
         te = time.time()
-        print('%r  %2.2f s' % (method.__name__, (te - ts)))
+        print '%r  %2.2f s' % \
+            (method.__name__, (te - ts))
         return result
     return timed
 
@@ -43,7 +44,7 @@ def share_snapshot(snapshot_arn, dest_account_id):
             ],
         )
     except Exception as e:
-        print(e)
+        print e
 
     print("Snapshot " + snapshot_arn + " shared to " + dest_account_id)
 
@@ -73,7 +74,7 @@ def copy_snapshot(source_snapshot_arn, kms_key_id, tg_snapshot_id):
                                     "DBSnapshotIdentifier"])
 
     except Exception as e:
-        print(e)
+        print e
 
     return target_snapshot_id
 
